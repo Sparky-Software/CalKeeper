@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:calcard_app/models/instrument_test.dart';
@@ -9,6 +12,13 @@ class PdfService {
 
   int pageCount = 1;
   List<pw.Table> tables = [];
+
+  Future<String> savePdfToFile(Uint8List pdfData) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final file = File('${directory.path}/test_overview.pdf');
+    await file.writeAsBytes(pdfData);
+    return file.path;
+  }
 
   Future<Uint8List> generateTestOverviewPdf(InstrumentTest activeTest) async {
     _makeBottomTable(activeTest);
@@ -422,9 +432,6 @@ class PdfService {
       ),
     );
     for(int i = 1; i < pageCount && i < tables.length; i++) {
-      print('Page Count: $pageCount');
-      print('i :$i');
-      print(this.tables.length);
       pdf.addPage(
         pw.Page(
           margin: const pw.EdgeInsets.all(24),
@@ -471,7 +478,7 @@ class PdfService {
     List<pw.TableRow> rows = [];
     InstrumentTestPoint testPoint;
 
-    if (activeTest.testPoints != null) {
+    if (activeTest.testPoints.isNotEmpty) {
       for (testPoint in activeTest.testPoints!) {
         rows.add(
           pw.TableRow(
@@ -540,8 +547,10 @@ class PdfService {
           children: rows,
         ));
       }
+      this.tables = tables;
+    } else{
+      this.tables = [pw.Table()];
     }
-    this.tables = tables;
   }
 
 

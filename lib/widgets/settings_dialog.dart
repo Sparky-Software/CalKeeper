@@ -43,7 +43,7 @@ class _SettingsDialogState extends State<SettingsDialog> {
         mainAxisSize: MainAxisSize.min,
         children: [
           SwitchListTile(
-            title: const Text('Notify me when my instrument tests are due'),
+            title: const Text('Notify me monthly when instrument checks are due.'),
             value: _notificationsEnabled,
             onChanged: (bool value) {
               setState(() {

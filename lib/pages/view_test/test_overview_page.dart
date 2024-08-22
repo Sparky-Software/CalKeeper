@@ -94,6 +94,7 @@ class TestOverviewPageState extends State<TestOverviewPage> {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: AppTheme.textSizeMedium,
+                            color: AppTheme.textColor1,
                           ),
                         ),
                       ),
@@ -116,7 +117,7 @@ class TestOverviewPageState extends State<TestOverviewPage> {
                             'Performed when the instrument is new or recently calibrated.',
                             style: TextStyle(
                               fontSize: AppTheme.textSizeSmall,
-                              color: Colors.grey,
+                              color: AppTheme.textColor2,
                             ),
                           ),
                         ],
@@ -131,7 +132,7 @@ class TestOverviewPageState extends State<TestOverviewPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Periodic Checks',
+                            'Monthly Checks',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 18,
@@ -142,7 +143,7 @@ class TestOverviewPageState extends State<TestOverviewPage> {
                             'Monthly records of test instrument accuracy.',
                             style: TextStyle(
                               fontSize: AppTheme.textSizeSmall,
-                              color: Colors.grey,
+                              color: AppTheme.textColor2,
                             ),
                           ),
                         ],
@@ -159,6 +160,7 @@ class TestOverviewPageState extends State<TestOverviewPage> {
                           "You haven't recorded any monthly checks yet.\nTap the '+' button each month to check instrument values are within tolerance.",
                           textAlign: TextAlign.center,
                           style: TextStyle(
+                            color: AppTheme.textColor1,
                             fontSize: AppTheme.textSizeMedium,
                           ),
                         ),
@@ -208,7 +210,6 @@ class TestOverviewPageState extends State<TestOverviewPage> {
                               PdfPageFormat format) async => pdfData);
                         }
                       },
-
                       icon: const Icon(Icons.picture_as_pdf),
                       label: const Text('Export to PDF'),
                       tooltip: 'Export test data to PDF',

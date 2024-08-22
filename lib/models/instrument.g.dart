@@ -21,13 +21,14 @@ class InstrumentAdapter extends TypeAdapter<Instrument> {
       model: fields[1] as String,
       serialNum: fields[2] as String,
       acquisitionDate: fields[3] as String,
+      tolerance: fields[4] as double,
     );
   }
 
   @override
   void write(BinaryWriter writer, Instrument obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.make)
       ..writeByte(1)
@@ -35,7 +36,9 @@ class InstrumentAdapter extends TypeAdapter<Instrument> {
       ..writeByte(2)
       ..write(obj.serialNum)
       ..writeByte(3)
-      ..write(obj.acquisitionDate);
+      ..write(obj.acquisitionDate)
+      ..writeByte(4)
+      ..write(obj.tolerance);
   }
 
   @override

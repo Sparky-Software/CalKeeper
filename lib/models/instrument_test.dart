@@ -25,9 +25,6 @@ class InstrumentTest {
   @HiveField(5)
   InstrumentTestPoint? activeTestPoint;
 
-  @HiveField(6)
-  double tolerance = 0.3;
-
   InstrumentTest({
     this.instrument,
     this.tester,

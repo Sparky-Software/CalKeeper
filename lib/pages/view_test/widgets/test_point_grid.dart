@@ -20,10 +20,10 @@ class _TestPointGridState extends State<TestPointGrid> {
   Widget build(BuildContext context) {
     final activeTest = Provider.of<TestService>(context).getActiveTest();
     final baseValues = activeTest?.baseValues;
-    final tolerance = activeTest?.tolerance ?? 0.3; // Default to 0.3 if not provided
+    final tolerance = activeTest?.instrument?.tolerance ?? 0.3; // Default to 0.3 if not provided
 
     if (baseValues == null) {
-      return Center(child: Text('No base values available'));
+      return const Center(child: Text('No base values available'));
     }
 
     final isOutOfRange = _isAnyValueOutOfRange(widget.testPoint, baseValues, tolerance);
@@ -82,7 +82,7 @@ class _TestPointGridState extends State<TestPointGrid> {
                   children: [
                     if (_isExpanded) ...[
                       IconButton(
-                        icon: Icon(Icons.edit, color: AppTheme.accentColor),
+                        icon: const Icon(Icons.edit, color: AppTheme.accentColor),
                         onPressed: () {
                           activeTest?.activeTestPoint = widget.testPoint;
                           Navigator.pushNamed(context, '/newTestPointPage');
@@ -527,10 +527,10 @@ class CustomExpansionTile extends StatefulWidget {
   });
 
   @override
-  _CustomExpansionTileState createState() => _CustomExpansionTileState();
+  CustomExpansionTileState createState() => CustomExpansionTileState();
 }
 
-class _CustomExpansionTileState extends State<CustomExpansionTile> {
+class CustomExpansionTileState extends State<CustomExpansionTile> {
   bool _isExpanded = false;
 
   @override

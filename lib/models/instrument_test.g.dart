@@ -23,14 +23,13 @@ class InstrumentTestAdapter extends TypeAdapter<InstrumentTest> {
       testPoints: (fields[3] as List?)?.cast<InstrumentTestPoint>(),
     )
       ..id = fields[4] as String
-      ..activeTestPoint = fields[5] as InstrumentTestPoint?
-      ..tolerance = fields[6] as double;
+      ..activeTestPoint = fields[5] as InstrumentTestPoint?;
   }
 
   @override
   void write(BinaryWriter writer, InstrumentTest obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.instrument)
       ..writeByte(1)
@@ -42,9 +41,7 @@ class InstrumentTestAdapter extends TypeAdapter<InstrumentTest> {
       ..writeByte(4)
       ..write(obj.id)
       ..writeByte(5)
-      ..write(obj.activeTestPoint)
-      ..writeByte(6)
-      ..write(obj.tolerance);
+      ..write(obj.activeTestPoint);
   }
 
   @override

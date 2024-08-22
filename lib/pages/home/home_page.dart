@@ -32,12 +32,12 @@ class HomePageState extends State<HomePage> {
 
     if (!hasShownNewInstrumentHint) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        ShowCaseWidget.of(context)?.startShowCase([_newInstrumentKey]);
+        ShowCaseWidget.of(context).startShowCase([_newInstrumentKey]);
         prefs.setBool('hasShownNewInstrumentHint', true);
       });
     } else if (!hasShownChartHint) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        ShowCaseWidget.of(context)?.startShowCase([_chartButtonKey]);
+        ShowCaseWidget.of(context).startShowCase([_chartButtonKey]);
         prefs.setBool('hasShownChartHint', true);
       });
     }

@@ -6,7 +6,7 @@ class AppTheme {
   static const Color primaryColor = Color(0xFFe84a45);
   static const Color backgroundColor = Color(0xF5F5F6F8);
   static const Color textColor1 = Color(0xFF333333);
-  static const Color textColor2 = Color(0xFF666666);
+  static const Color textColor2 = Color(0xFF858585);
   static const Color accentColor = Color(0xFF0057D7);
   static const Color buttonTextColor = backgroundColor;
   static const Color textBoxColor = Color(0xFFF6F6F6);
@@ -78,6 +78,16 @@ class AppTheme {
         textTheme: ButtonTextTheme.primary,
         colorScheme: ColorScheme.light().copyWith(
           primary: buttonTextColor,
+        ),
+      ),
+      sliderTheme: SliderThemeData(
+        activeTrackColor: accentColor,
+        inactiveTrackColor: textColor2.withOpacity(0.5),
+        thumbColor: accentColor,
+        overlayColor: accentColor.withOpacity(0.3),
+        valueIndicatorColor: accentColor,
+        valueIndicatorTextStyle: TextStyle(
+          color: buttonTextColor,
         ),
       ),
       expansionTileTheme: ExpansionTileThemeData(

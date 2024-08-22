@@ -121,7 +121,7 @@ class _TesterDetailsPageState extends State<TesterDetailsPage> {
             children: <Widget>[
               CustomTextFormField(
                 controller: _nameController,
-                decoration: const InputDecoration(labelText: '*Name of Engineer'),
+                decoration: const InputDecoration(labelText: 'Name of Engineer'),
                 textCapitalization: TextCapitalization.words,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -140,7 +140,7 @@ class _TesterDetailsPageState extends State<TesterDetailsPage> {
                 decoration: const InputDecoration(labelText: 'Address'),
                 multiLine: true,
                 textInputAction: TextInputAction.newline,
-                textCapitalization: TextCapitalization.sentences,
+                textCapitalization: TextCapitalization.words,
               ),
               CustomTextFormField(
                 controller: _emailController,
