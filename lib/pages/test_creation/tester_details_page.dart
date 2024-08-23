@@ -59,7 +59,7 @@ class _TesterDetailsPageState extends State<TesterDetailsPage> {
   void _saveTester() {
     final address = _addressController.text;
 
-    if (address.split('\n').length <= 1 && address != ""&&!warningShown) {
+    if (address.split('\n').length <= 1 && address.isNotEmpty && !warningShown) {
       _showAddressWarningDialog();
       warningShown = true;
     } else {
@@ -95,13 +95,21 @@ class _TesterDetailsPageState extends State<TesterDetailsPage> {
     }
   }
 
+  String? _validateNameAndCompanyName() {
+    if (_nameController.text.trim().isEmpty &&
+        _companyNameController.text.trim().isEmpty) {
+      return 'At least either Name or Company Name must be provided.';
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(isEditing ? 'Edit Test Engineer Details' : 'Enter Test Engineer details'),
         actions: [
-          if (isEditing&&Provider.of<TesterService>(context, listen: false).inTestCreation)
+          if (isEditing && Provider.of<TesterService>(context, listen: false).inTestCreation)
             IconButton(
               icon: Icon(Icons.delete),
               onPressed: () {
@@ -123,17 +131,13 @@ class _TesterDetailsPageState extends State<TesterDetailsPage> {
                 controller: _nameController,
                 decoration: const InputDecoration(labelText: 'Name of Engineer'),
                 textCapitalization: TextCapitalization.words,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Name is required';
-                  }
-                  return null;
-                },
+                validator: (value) => _validateNameAndCompanyName(),
               ),
               CustomTextFormField(
                 controller: _companyNameController,
                 decoration: const InputDecoration(labelText: 'Company Name'),
                 textCapitalization: TextCapitalization.words,
+                validator: (value) => _validateNameAndCompanyName(),
               ),
               CustomTextFormField(
                 controller: _addressController,
@@ -171,6 +175,7 @@ class _TesterDetailsPageState extends State<TesterDetailsPage> {
       ),
     );
   }
+
   void _showAddressWarningDialog() {
     showDialog(
       context: context,
@@ -181,5 +186,4 @@ class _TesterDetailsPageState extends State<TesterDetailsPage> {
       },
     );
   }
-
 }

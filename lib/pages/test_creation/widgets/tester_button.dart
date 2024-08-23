@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import '../../../core/utils/theme.dart';
 import '../../../services/test_service.dart';
 import '../../../services/tester_service.dart';
-import '../tester_details_page.dart';
 
 class TesterButton extends StatelessWidget {
   final Tester tester;
@@ -12,12 +11,16 @@ class TesterButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final name = tester.name;
     final List<String> subtitleLines = [];
 
-    if (name.isNotEmpty) {
-      subtitleLines.add('Name: $name');
+    if(tester.name.isNotEmpty) {
+      subtitleLines.add('Name: ${tester.name}');
     }
+
+    if(tester.companyName.isNotEmpty) {
+      subtitleLines.add('Company: ${tester.companyName}');
+    }
+
     if (tester.email.isNotEmpty) {
       subtitleLines.add('Email: ${tester.email}');
     }
@@ -26,9 +29,6 @@ class TesterButton extends StatelessWidget {
     }
     if (tester.phone.isNotEmpty) {
       subtitleLines.add('Phone: ${tester.phone}');
-    }
-    if (tester.companyName.isNotEmpty) {
-      subtitleLines.add('Company: ${tester.companyName}');
     }
     if (tester.NICEICNumber.isNotEmpty) {
       subtitleLines.add('NICEIC Number: ${tester.NICEICNumber}');
@@ -45,7 +45,7 @@ class TesterButton extends StatelessWidget {
       ),
       child: ListTile(
         title: Text(
-          name.isNotEmpty ? name : 'Unknown Tester',
+          tester.name.isNotEmpty ? tester.name : (tester.companyName.isNotEmpty ? tester.companyName : 'Unknown Tester'),
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 22, height: 1.2),
         ),
         subtitle: Text(

@@ -10,7 +10,7 @@ class WarningDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: const Text(
-        "Warning",
+        "Address Formating",
         textAlign: TextAlign.center,
         style: TextStyle(
           fontSize: AppTheme.textSizeLarge,

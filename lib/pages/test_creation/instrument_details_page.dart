@@ -52,7 +52,6 @@ class InstrumentDetailsPageState extends State<InstrumentDetailsPage> {
 
     if (activeTest?.tester == null) {
       if (testerService.testers.isEmpty) {
-        TesterService testerService = Provider.of<TesterService>(context, listen: false);
         testerService.inTestCreation = true;
         Navigator.pushNamed(context, '/testerDetailsPage');
       } else {
@@ -88,6 +87,13 @@ class InstrumentDetailsPageState extends State<InstrumentDetailsPage> {
     }
   }
 
+  String? _validateMakeAndModel() {
+    if (_makeController.text.trim().isEmpty &&
+        _modelController.text.trim().isEmpty) {
+      return 'At least either Make or Model must be provided.';
+    }
+    return null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -105,11 +111,13 @@ class InstrumentDetailsPageState extends State<InstrumentDetailsPage> {
                 controller: _makeController,
                 textCapitalization: TextCapitalization.words,
                 decoration: const InputDecoration(labelText: 'Make'),
+                validator: (value) => _validateMakeAndModel(),
               ),
               CustomTextFormField(
                 controller: _modelController,
                 textCapitalization: TextCapitalization.words,
                 decoration: const InputDecoration(labelText: 'Model'),
+                validator: (value) => _validateMakeAndModel(),
               ),
               CustomTextFormField(
                 controller: _serialNumController,

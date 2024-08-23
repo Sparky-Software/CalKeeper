@@ -1,5 +1,5 @@
 import 'package:calcard_app/core/utils/theme.dart';
-import 'package:calcard_app/pages/view_test/widgets/deletion_confirmation_dialog.dart';
+import 'package:calcard_app/widgets/confirmation_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:pdf/pdf.dart';
 import 'package:provider/provider.dart';
@@ -181,7 +181,7 @@ class TestOverviewPageState extends State<TestOverviewPage> {
                     Showcase(
                       key: _addTestPointButtonKey,
                       title: 'Perform monthly check',
-                      description: 'Tap this button each month to record the test results for this instrument, or the baseline reference that future checks will be compared to if this is a new instrument.',
+                      description: 'Tap this button to record the baseline reference values for a new instrument',
                       targetBorderRadius: BorderRadius.circular(100),
                       targetPadding: const EdgeInsets.all(10),
                       child: FloatingActionButton(

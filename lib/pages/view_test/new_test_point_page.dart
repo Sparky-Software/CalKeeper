@@ -1,4 +1,4 @@
-import 'package:calcard_app/pages/view_test/widgets/deletion_confirmation_dialog.dart';
+import 'package:calcard_app/widgets/confirmation_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -7,6 +7,7 @@ import 'package:calcard_app/models/instrument_test_point.dart'; //
 import 'package:calcard_app/widgets/custom_text_form_field.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../models/instrument_test.dart';
 import '../view_test/widgets/warning_dialog.dart';
 
 class NewTestPointPage extends StatefulWidget {
@@ -34,7 +35,6 @@ class NewTestPointPageState extends State<NewTestPointPage> {
 
   bool _isOverridePass = false;
   double _tolerance = 0.15;
-  bool _warningShown = false;
 
   @override
   void initState() {
@@ -57,6 +57,7 @@ class NewTestPointPageState extends State<NewTestPointPage> {
     _dateController = TextEditingController(text: testPoint?.date ?? '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}');
 
     for (int i = 0; i < 5; i++) {
+
       _insulationControllers[i] = TextEditingController(
         text: (testPoint?.insulation[i] == null || testPoint?.insulation[i] == -1)
             ? ''
@@ -132,7 +133,7 @@ class NewTestPointPageState extends State<NewTestPointPage> {
     return true;
   }
 
-  void _saveTestPoint() {
+  void _saveTestPoint({void Function()? onConfirm}) {
     if (_formKey.currentState?.validate() ?? false) {
       final testService = Provider.of<TestService>(context, listen: false);
       final activeTest = testService.getActiveTest();
@@ -161,54 +162,69 @@ class NewTestPointPageState extends State<NewTestPointPage> {
           referenceContinuityValues,
         );
 
-        if (isBaseline && exceedsThreshold && !_warningShown) {
-          _warningShown = true;
+        if (isBaseline && exceedsThreshold) {
           showDialog(
             context: context,
             builder: (BuildContext context) {
-              return WarningDialog(
-                onProceed: () {
-                  Navigator.of(context).pop();
+              return ConfirmationDialog(
+                onConfirm: () {
+                  Navigator.of(context).pop(); // Close the dialog
+                  _continueSave(testService, activeTest, insulationValues, continuityValues, zsValue, rcdValue, remedialAction, isBaseline, id);
                 },
-                tolerance: _tolerance,
+                title: "Value warning",
+                content: 'One or more of the fields entered are more than ${(_tolerance * 100).toInt()}% outside what is expected. Are you sure you have entered the correct values?',
               );
             },
           );
           return;
-        }
-
-        final testPoint = InstrumentTestPoint(
-          date: _dateController.text,
-          insulation: insulationValues,
-          continuity: continuityValues,
-          zs: zsValue,
-          rcd: rcdValue,
-          state: _isFailed ? 'fail' : 'pass',
-          isOverridePass: _isOverridePass,
-          id: id,
-          remedialAction: remedialAction.isNotEmpty ? remedialAction : null,
-          isBaseline: isBaseline,
-        );
-
-        if (activeTest?.activeTestPoint != null) {
-          if (activeTest?.activeTestPoint?.isBaseline == true) {
-            testService.updateBaseValues(activeTest!, testPoint);
-          } else {
-            testService.updateTestPoint(activeTest!, testPoint);
-            activeTest.activeTestPoint = null;
-          }
-        } else if (activeTest?.baseValues == null) {
-          testService.addTestPoint(activeTest!, testPoint, isBase: true);
         } else {
-          testService.addTestPoint(activeTest!, testPoint);
+          _continueSave(testService, activeTest, insulationValues, continuityValues, zsValue, rcdValue, remedialAction, isBaseline, id);
         }
-        Navigator.pop(context);
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Error: Invalid data entered.')),
         );
       }
     }
+  }
+
+  void _continueSave(
+      TestService testService,
+      InstrumentTest? activeTest,
+      List<double> insulationValues,
+      List<double> continuityValues,
+      double zsValue,
+      double rcdValue,
+      String remedialAction,
+      bool isBaseline,
+      String id,
+      ) {
+    final testPoint = InstrumentTestPoint(
+      date: _dateController.text,
+      insulation: insulationValues,
+      continuity: continuityValues,
+      zs: zsValue,
+      rcd: rcdValue,
+      state: _isFailed ? 'fail' : 'pass',
+      isOverridePass: _isOverridePass,
+      id: id,
+      remedialAction: remedialAction.isNotEmpty ? remedialAction : null,
+      isBaseline: isBaseline,
+    );
+
+    if (activeTest?.activeTestPoint != null) {
+      if (activeTest?.activeTestPoint?.isBaseline == true) {
+        testService.updateBaseValues(activeTest!, testPoint);
+      } else {
+        testService.updateTestPoint(activeTest!, testPoint);
+        activeTest.activeTestPoint = null;
+      }
+    } else if (activeTest?.baseValues == null) {
+      testService.addTestPoint(activeTest!, testPoint, isBase: true);
+    } else {
+      testService.addTestPoint(activeTest!, testPoint);
+    }
+    Navigator.pop(context);
   }
 
   Future<void> _loadTolerance() async {
@@ -219,9 +235,6 @@ class NewTestPointPageState extends State<NewTestPointPage> {
   }
 
   bool _checkThresholdExceeded(List<double> insulationValues, List<double> continuityValues, List<double> referenceInsulationValues, List<double> referenceContinuityValues) {
-
-    print("tolerance is");
-    print(_tolerance);
 
     _loadTolerance();
     for (int i = 0; i < insulationValues.length; i++) {
@@ -274,6 +287,10 @@ class NewTestPointPageState extends State<NewTestPointPage> {
 
   @override
   Widget build(BuildContext context) {
+    final testService = Provider.of<TestService>(context, listen: false);
+    final activeTest = testService.getActiveTest();
+    final baseValues = activeTest?.baseValues;
+
     return WillPopScope(
       onWillPop: () async {
         if (_hasUnsavedChanges()) {
@@ -296,7 +313,7 @@ class NewTestPointPageState extends State<NewTestPointPage> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-            (Provider.of<TestService>(context, listen: false).getActiveTest()?.activeTestPoint != null
+            (activeTest?.activeTestPoint != null
                 ? (_isBaseline
                 ? 'Edit Baseline Reference'
                 : 'Edit Instrument Test Data'
@@ -308,12 +325,11 @@ class NewTestPointPageState extends State<NewTestPointPage> {
             ),
           ),
           actions: [
-            if (Provider.of<TestService>(context, listen: false).getActiveTest()?.activeTestPoint != null)
+            if (activeTest?.activeTestPoint != null)
               IconButton(
                 icon: const Icon(Icons.delete),
                 onPressed: () {
-                  final testService = Provider.of<TestService>(context, listen: false);
-                  if(testService.getActiveTest()?.activeTestPoint?.isBaseline == true) {
+                  if (testService.getActiveTest()?.activeTestPoint?.isBaseline == true) {
                     testService.deleteBaseline(testService.getActiveTest()!);
                   } else {
                     testService.deleteActiveTestPoint(testService.getActiveTest()!);
@@ -335,8 +351,7 @@ class NewTestPointPageState extends State<NewTestPointPage> {
                   children: [
                     CustomTextFormField(
                       controller: _dateController,
-                      decoration:
-                      const InputDecoration(labelText: 'Date of Test'),
+                      decoration: const InputDecoration(labelText: 'Date of Test'),
                       keyboardType: TextInputType.datetime,
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(10),
@@ -344,46 +359,61 @@ class NewTestPointPageState extends State<NewTestPointPage> {
                     ),
                     const Divider(),
                     const Text('Insulation Values:'),
-                    ...List.generate(5, (index) => CustomTextFormField(
-                      controller: _insulationControllers[index],
-                      decoration: InputDecoration(
-                        labelText: _getInsulationLabel(index),
-                        border: const OutlineInputBorder(),
-                      ),
-                      keyboardType: TextInputType.number,
-                      unit: 'MΩ',
-                    )),
+                    ...List.generate(5, (index) {
+                      final value = _isBaseline ? null : baseValues?.insulation[index];
+                      if (_isBaseline || (value != null && value != -1.0)) {
+                        return CustomTextFormField(
+                          controller: _insulationControllers[index],
+                          decoration: InputDecoration(
+                            labelText: _getInsulationLabel(index),
+                            border: const OutlineInputBorder(),
+                          ),
+                          keyboardType: TextInputType.number,
+                          unit: 'MΩ',
+                        );
+                      }
+                      return SizedBox.shrink(); // No widget if condition not met
+                    }),
                     const Divider(),
                     const Text('Continuity Values:'),
-                    ...List.generate(5, (index) => CustomTextFormField(
-                      controller: _continuityControllers[index],
-                      decoration: InputDecoration(
-                        labelText: _getContinuityLabel(index),
-                        border: const OutlineInputBorder(),
-                      ),
-                      keyboardType: TextInputType.number,
-                      unit: 'Ω',
-                    )),
+                    ...List.generate(5, (index) {
+                      final value = _isBaseline ? null : baseValues?.continuity[index];
+                      if (_isBaseline || (value != null && value != -1.0)) {
+                        return CustomTextFormField(
+                          controller: _continuityControllers[index],
+                          decoration: InputDecoration(
+                            labelText: _getContinuityLabel(index),
+                            border: const OutlineInputBorder(),
+                          ),
+                          keyboardType: TextInputType.number,
+                          unit: 'Ω',
+                        );
+                      }
+                      return SizedBox.shrink(); // No widget if condition not met
+                    }),
                     const Divider(),
-                    CustomTextFormField(
-                      controller: _zsController,
-                      decoration: const InputDecoration(
-                        labelText: 'Zs:',
-                        border: OutlineInputBorder(),
+                    if (_isBaseline || (baseValues?.zs != null && baseValues?.zs != -1.0)) ...[
+                      CustomTextFormField(
+                        controller: _zsController,
+                        decoration: const InputDecoration(
+                          labelText: 'Zs:',
+                          border: OutlineInputBorder(),
+                        ),
+                        unit: 'Ω',
+                        keyboardType: TextInputType.number,
                       ),
-                      unit: 'Ω',
-                      keyboardType: TextInputType.number,
-                    ),
-                    CustomTextFormField(
-                      controller: _rcdController,
-                      decoration: const InputDecoration(
-                        labelText: 'Rcd:',
-                        border: OutlineInputBorder(),
+                    ],
+                    if (_isBaseline || (baseValues?.rcd != null && baseValues?.rcd != -1.0)) ...[
+                      CustomTextFormField(
+                        controller: _rcdController,
+                        decoration: const InputDecoration(
+                          labelText: 'Rcd:',
+                          border: OutlineInputBorder(),
+                        ),
+                        keyboardType: TextInputType.number,
+                        unit: 'ms',
                       ),
-                      keyboardType: TextInputType.number,
-                      unit: 'ms',
-                    ),
-
+                    ],
                     if (_isFailed) ...[
                       const Divider(),
                       const Text('One or more values in this check fall outside the allowed threshold of the baseline reference. Please describe the remedial action that was taken to repair the instrument, then perform a new check. If this is wrong, you can override the check as a pass.'),
@@ -431,6 +461,7 @@ class NewTestPointPageState extends State<NewTestPointPage> {
       ),
     );
   }
+
 
   String _getInsulationLabel(int index) {
     switch (index) {

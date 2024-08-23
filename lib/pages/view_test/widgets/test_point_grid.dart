@@ -297,11 +297,11 @@ class _TestPointGridState extends State<TestPointGrid> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Expanded(child: Center(child: Text('0.5M', style: _labelTextStyle))),
-                        Expanded(child: Center(child: Text('1M', style: _labelTextStyle))),
-                        Expanded(child: Center(child: Text('2M', style: _labelTextStyle))),
-                        Expanded(child: Center(child: Text('10M', style: _labelTextStyle))),
-                        Expanded(child: Center(child: Text('20M', style: _labelTextStyle))),
+                        if(baseValues.insulation[0] != -1.0) Expanded(child: Center(child: Text('0.25M', style: _labelTextStyle))),
+                        if(baseValues.insulation[1] != -1.0) Expanded(child: Center(child: Text('0.5M', style: _labelTextStyle))),
+                        if(baseValues.insulation[2] != -1.0) Expanded(child: Center(child: Text('1M', style: _labelTextStyle))),
+                        if(baseValues.insulation[3] != -1.0) Expanded(child: Center(child: Text('2M', style: _labelTextStyle))),
+                        if(baseValues.insulation[4] != -1.0) Expanded(child: Center(child: Text('5M', style: _labelTextStyle))),
                       ],
                     ),
                     const Divider(thickness: 1.0, color: AppTheme.textColor2),
@@ -311,6 +311,10 @@ class _TestPointGridState extends State<TestPointGrid> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: List.generate(5, (index) {
+                        //check if base value is empty, if reduce number of values in row by 1
+                        if (baseValues.insulation[index] == -1.0) {
+                          return const SizedBox.shrink();
+                        }
                         final value = widget.testPoint.insulation[index];
                         final baseValue = baseValues.insulation[index];
                         final min = baseValue - (baseValue * tolerance);
@@ -347,11 +351,11 @@ class _TestPointGridState extends State<TestPointGrid> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Expanded(child: Center(child: Text('0.25Ω', style: _labelTextStyle))),
-                        Expanded(child: Center(child: Text('0.5Ω', style: _labelTextStyle))),
-                        Expanded(child: Center(child: Text('1Ω', style: _labelTextStyle))),
-                        Expanded(child: Center(child: Text('2Ω', style: _labelTextStyle))),
-                        Expanded(child: Center(child: Text('5Ω', style: _labelTextStyle))),
+                        if(baseValues.continuity[0] != -1.0) Expanded(child: Center(child: Text('0.25M', style: _labelTextStyle))),
+                        if(baseValues.continuity[1] != -1.0) Expanded(child: Center(child: Text('0.5M', style: _labelTextStyle))),
+                        if(baseValues.continuity[2] != -1.0) Expanded(child: Center(child: Text('1M', style: _labelTextStyle))),
+                        if(baseValues.continuity[3] != -1.0) Expanded(child: Center(child: Text('2M', style: _labelTextStyle))),
+                        if(baseValues.continuity[4] != -1.0) Expanded(child: Center(child: Text('5M', style: _labelTextStyle))),
                       ],
                     ),
                     const Divider(thickness: 1.0, color: AppTheme.textColor2),
@@ -361,6 +365,9 @@ class _TestPointGridState extends State<TestPointGrid> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: List.generate(5, (index) {
+                        if (baseValues.continuity[index] == -1.0) {
+                          return const SizedBox.shrink();
+                        }
                         final value = widget.testPoint.continuity[index];
                         final baseValue = baseValues.continuity[index];
                         final min = baseValue - (baseValue * tolerance);
