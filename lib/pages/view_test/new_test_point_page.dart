@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:calcard_app/services/test_service.dart';
-import 'package:calcard_app/models/instrument_test_point.dart'; // Import your data model
+import 'package:calcard_app/models/instrument_test_point.dart'; //
 import 'package:calcard_app/widgets/custom_text_form_field.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../view_test/widgets/warning_dialog.dart';
 
 class NewTestPointPage extends StatefulWidget {
   const NewTestPointPage({super.key});
@@ -30,6 +33,8 @@ class NewTestPointPageState extends State<NewTestPointPage> {
   late String _initialRemedialActionValue;
 
   bool _isOverridePass = false;
+  double _tolerance = 0.15;
+  bool _warningShown = false;
 
   @override
   void initState() {
@@ -122,7 +127,7 @@ class NewTestPointPageState extends State<NewTestPointPage> {
           );
         },
       );
-      return shouldPop ?? false;
+      return shouldPop;
     }
     return true;
   }
@@ -141,10 +146,36 @@ class NewTestPointPageState extends State<NewTestPointPage> {
             .toList();
         final zsValue = _parseDouble(_zsController.text);
         final rcdValue = _parseDouble(_rcdController.text);
-        final remedialAction = _remedialActionController.text; // Capture the remedial action
+        final remedialAction = _remedialActionController.text;
         final isBaseline = activeTest?.activeTestPoint?.isBaseline ?? false;
         final id = activeTest?.activeTestPoint?.id ?? DateTime.now().toString();
 
+        // Reference values for insulation and continuity
+        final List<double> referenceInsulationValues = [0.5, 1, 2, 10, 20];
+        final List<double> referenceContinuityValues = [0.25, 0.5, 1, 2, 5];
+
+        bool exceedsThreshold = _checkThresholdExceeded(
+          insulationValues,
+          continuityValues,
+          referenceInsulationValues,
+          referenceContinuityValues,
+        );
+
+        if (isBaseline && exceedsThreshold && !_warningShown) {
+          _warningShown = true;
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return WarningDialog(
+                onProceed: () {
+                  Navigator.of(context).pop();
+                },
+                tolerance: _tolerance,
+              );
+            },
+          );
+          return;
+        }
 
         final testPoint = InstrumentTestPoint(
           date: _dateController.text,
@@ -174,10 +205,40 @@ class NewTestPointPageState extends State<NewTestPointPage> {
         Navigator.pop(context);
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: Invalid data entered.')),
+          const SnackBar(content: Text('Error: Invalid data entered.')),
         );
       }
     }
+  }
+
+  Future<void> _loadTolerance() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _tolerance = prefs.getDouble('tolerance') ?? 0.15;
+    });
+  }
+
+  bool _checkThresholdExceeded(List<double> insulationValues, List<double> continuityValues, List<double> referenceInsulationValues, List<double> referenceContinuityValues) {
+
+    print("tolerance is");
+    print(_tolerance);
+
+    _loadTolerance();
+    for (int i = 0; i < insulationValues.length; i++) {
+      if (insulationValues[i]!=-1.0 &&
+          (insulationValues[i] - referenceInsulationValues[i]).abs() / referenceInsulationValues[i] > _tolerance)  {
+        return true;
+      }
+    }
+
+    for (int i = 0; i < continuityValues.length; i++) {
+      if (continuityValues[i]!=-1.0 &&
+          (continuityValues[i] - referenceContinuityValues[i]).abs() / referenceContinuityValues[i] > _tolerance) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   double _parseDouble(String value) {
@@ -228,7 +289,7 @@ class NewTestPointPageState extends State<NewTestPointPage> {
               );
             },
           );
-          return shouldPop ?? false;
+          return shouldPop;
         }
         return true;
       },
@@ -249,7 +310,7 @@ class NewTestPointPageState extends State<NewTestPointPage> {
           actions: [
             if (Provider.of<TestService>(context, listen: false).getActiveTest()?.activeTestPoint != null)
               IconButton(
-                icon: Icon(Icons.delete),
+                icon: const Icon(Icons.delete),
                 onPressed: () {
                   final testService = Provider.of<TestService>(context, listen: false);
                   if(testService.getActiveTest()?.activeTestPoint?.isBaseline == true) {
@@ -282,7 +343,7 @@ class NewTestPointPageState extends State<NewTestPointPage> {
                       ],
                     ),
                     const Divider(),
-                    Text('Insulation Values:'),
+                    const Text('Insulation Values:'),
                     ...List.generate(5, (index) => CustomTextFormField(
                       controller: _insulationControllers[index],
                       decoration: InputDecoration(
@@ -293,7 +354,7 @@ class NewTestPointPageState extends State<NewTestPointPage> {
                       unit: 'MΩ',
                     )),
                     const Divider(),
-                    Text('Continuity Values:'),
+                    const Text('Continuity Values:'),
                     ...List.generate(5, (index) => CustomTextFormField(
                       controller: _continuityControllers[index],
                       decoration: InputDecoration(
@@ -354,7 +415,7 @@ class NewTestPointPageState extends State<NewTestPointPage> {
                       ),
                     ],
                     const SizedBox(height: 20),
-                    Container(
+                    SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: _saveTestPoint,
@@ -373,11 +434,11 @@ class NewTestPointPageState extends State<NewTestPointPage> {
 
   String _getInsulationLabel(int index) {
     switch (index) {
-      case 0: return '0.5M:';
-      case 1: return '1M:';
-      case 2: return '2M:';
-      case 3: return '10M:';
-      case 4: return '20M:';
+      case 0: return '0.5M\u2126:';
+      case 1: return '1M\u2126:';
+      case 2: return '2M\u2126:';
+      case 3: return '10M\u2126:';
+      case 4: return '20M\u2126:';
       default: return '';
     }
   }

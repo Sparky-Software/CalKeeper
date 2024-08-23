@@ -1,4 +1,5 @@
 import 'package:calcard_app/pages/home/home_page.dart';
+import 'package:calcard_app/pages/home/settings_page.dart';
 import 'package:calcard_app/pages/test_creation/instrument_details_page.dart';
 import 'package:calcard_app/pages/test_creation/select_tester_page.dart';
 import 'package:calcard_app/pages/test_creation/tester_details_page.dart';
@@ -53,6 +54,7 @@ void main() async {
             '/home': (context) => const HomePage(),
             '/testOverview': (context) => const TestOverviewPage(),
             '/newTestPointPage': (context) => const NewTestPointPage(),
+            '/settingsPage': (context) => const SettingsPage(),
             // Add other routes here
           },
         ),

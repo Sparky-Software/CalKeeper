@@ -16,14 +16,10 @@ class Instrument {
   @HiveField(3)
   String acquisitionDate;
 
-  @HiveField(4)
-  double tolerance = 0.3;
-
   Instrument({
     required this.make,
     required this.model,
     required this.serialNum,
     required this.acquisitionDate,
-    this.tolerance = 0.3,
   });
 }

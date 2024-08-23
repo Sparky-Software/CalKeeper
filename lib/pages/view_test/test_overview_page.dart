@@ -90,7 +90,7 @@ class TestOverviewPageState extends State<TestOverviewPage> {
                       padding: EdgeInsets.all(16.0),
                       child: Center(
                         child: Text(
-                          "You haven't recorded a baseline reference yet.\nTap the '+' button to get started.",
+                          "You haven't recorded a baseline reference yet, tap the '+' button to get started. Ideally, this should be done when the instrument is new or recently calibrated.",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: AppTheme.textSizeMedium,
@@ -180,8 +180,8 @@ class TestOverviewPageState extends State<TestOverviewPage> {
                   children: [
                     Showcase(
                       key: _addTestPointButtonKey,
-                      title: 'Perform monthly test',
-                      description: 'Tap this button each month to record the calcard test results for this instrument.',
+                      title: 'Perform monthly check',
+                      description: 'Tap this button each month to record the test results for this instrument, or the baseline reference that future checks will be compared to if this is a new instrument.',
                       targetBorderRadius: BorderRadius.circular(100),
                       targetPadding: const EdgeInsets.all(10),
                       child: FloatingActionButton(

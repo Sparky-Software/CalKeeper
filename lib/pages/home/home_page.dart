@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:showcaseview/showcaseview.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:calcard_app/core/utils/theme.dart';
 import 'package:calcard_app/services/test_service.dart';
 import 'package:calcard_app/pages/home/widgets/instrument_test_button.dart';
-import 'package:calcard_app/widgets/settings_dialog.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -17,7 +15,7 @@ class HomePage extends StatefulWidget {
 
 class HomePageState extends State<HomePage> {
   final GlobalKey _newInstrumentKey = GlobalKey();
-  final GlobalKey _chartButtonKey = GlobalKey(); // Key for the chart showcase
+  final Map<int, GlobalKey> _chartButtonKeys = {}; // Map to hold keys for each button
 
   @override
   void initState() {
@@ -37,20 +35,15 @@ class HomePageState extends State<HomePage> {
       });
     } else if (!hasShownChartHint) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        ShowCaseWidget.of(context).startShowCase([_chartButtonKey]);
-        prefs.setBool('hasShownChartHint', true);
+        // Check if any keys have been created before starting the showcase
+        if (_chartButtonKeys.isNotEmpty) {
+          ShowCaseWidget.of(context).startShowCase(_chartButtonKeys.values.toList());
+          prefs.setBool('hasShownChartHint', true);
+        }
       });
     }
   }
 
-  void _showSettingsDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return SettingsDialog();
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,14 +53,21 @@ class HomePageState extends State<HomePage> {
         title: const Text('Electrical Test Instruments'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: _showSettingsDialog,
+              icon: const Icon(Icons.settings),
+              onPressed: () { Navigator.pushNamed(context, '/settingsPage'); }
           ),
         ],
       ),
       body: Consumer<TestService>(
         builder: (context, testService, child) {
           final instrumentTests = testService.instrumentTests;
+
+          // Generate unique keys for each button
+          _chartButtonKeys.clear();
+          for (var i = 0; i < instrumentTests.length; i++) {
+            _chartButtonKeys[i] = GlobalKey();
+          }
+
           return Stack(
             children: [
               if (instrumentTests.isEmpty)
@@ -85,13 +85,14 @@ class HomePageState extends State<HomePage> {
                 )
               else
                 SingleChildScrollView(
-                  padding: const EdgeInsets.only(bottom: 80.0), // Add bottom padding to prevent overlap
+                  padding: const EdgeInsets.only(bottom: 80.0),
                   child: Column(
-                    children: instrumentTests.map((test) {
-                      final uniqueChartButtonKey = GlobalKey(); // Create a unique GlobalKey for each button
+                    children: instrumentTests.asMap().entries.map((entry) {
+                      int index = entry.key;
+                      var test = entry.value;
                       return InstrumentTestButton(
                         test: test,
-                        showcaseKey: uniqueChartButtonKey, // Pass the unique key
+                        showcaseKey: _chartButtonKeys[index]!,
                       );
                     }).toList(),
                   ),

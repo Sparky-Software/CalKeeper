@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:calcard_app/models/instrument_test_point.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../core/utils/theme.dart';
 import '../../../services/test_service.dart';
 
@@ -15,12 +16,21 @@ class TestPointGrid extends StatefulWidget {
 
 class _TestPointGridState extends State<TestPointGrid> {
   bool _isExpanded = false;
+  double _tolerance = 0.15;
+
+  Future<void> _loadTolerance() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _tolerance = prefs.getDouble('tolerance') ?? 0.15;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    _loadTolerance();
     final activeTest = Provider.of<TestService>(context).getActiveTest();
     final baseValues = activeTest?.baseValues;
-    final tolerance = activeTest?.instrument?.tolerance ?? 0.3; // Default to 0.3 if not provided
+    final tolerance = _tolerance;
 
     if (baseValues == null) {
       return const Center(child: Text('No base values available'));

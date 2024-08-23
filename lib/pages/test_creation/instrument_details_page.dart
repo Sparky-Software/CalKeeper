@@ -20,7 +20,6 @@ class InstrumentDetailsPageState extends State<InstrumentDetailsPage> {
   late TextEditingController _modelController;
   late TextEditingController _serialNumController;
   late TextEditingController _acquisitionDateController;
-  double _tolerance = 0.3;
 
   @override
   void initState() {
@@ -35,7 +34,6 @@ class InstrumentDetailsPageState extends State<InstrumentDetailsPage> {
         TextEditingController(text: instrument?.serialNum ?? '');
     _acquisitionDateController =
         TextEditingController(text: instrument?.acquisitionDate ?? '');
-    _tolerance = instrument?.tolerance ?? 0.3;
   }
 
   @override
@@ -77,7 +75,6 @@ class InstrumentDetailsPageState extends State<InstrumentDetailsPage> {
         model: _modelController.text,
         serialNum: _serialNumController.text,
         acquisitionDate: _acquisitionDateController.text,
-        tolerance: _tolerance,
       );
 
       try {
@@ -127,42 +124,6 @@ class InstrumentDetailsPageState extends State<InstrumentDetailsPage> {
                 inputFormatters: [
                   LengthLimitingTextInputFormatter(10),
                 ],
-              ),
-              const Text(
-                "Tolerance level:",
-                style: TextStyle(
-                  fontSize: AppTheme.textSizeMedium,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 16, bottom: 8),
-                child: Text(
-                  '${(100*_tolerance).toStringAsFixed(0)}%',
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: AppTheme.textSizeLarge,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              Slider(
-                min: 0.0,
-                max: 1.0,
-                divisions: 100,
-                value: _tolerance,
-                onChanged: (value) {
-                  setState(() {
-                    _tolerance = value;
-                  });
-                },
-              ),
-              const Text(
-                "Highlights when instrument monthly checks fall outside this tolerance level from the baseline reference.",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: AppTheme.textSizeSmall,
-                  color: AppTheme.textColor2
-                ),
               ),
               const SizedBox(height: 20),
               ElevatedButton(

@@ -4,7 +4,6 @@ import 'package:calcard_app/core/utils/theme.dart';
 import 'package:calcard_app/models/instrument_test.dart';
 import 'package:calcard_app/services/test_service.dart';
 import 'package:showcaseview/showcaseview.dart';
-
 class InstrumentTestButton extends StatelessWidget {
   final InstrumentTest test;
   final GlobalKey showcaseKey;
@@ -45,7 +44,11 @@ class InstrumentTestButton extends StatelessWidget {
         child: ListTile(
           title: Text(
             title,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: AppTheme.textSizeLarge, height: 1.2),
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: AppTheme.textSizeLarge,
+              height: 1.2,
+            ),
           ),
           subtitle: Text(
             subtitleLines.join('\n'),
@@ -53,14 +56,30 @@ class InstrumentTestButton extends StatelessWidget {
           ),
           trailing: Showcase(
             key: showcaseKey,
-            title: 'Go to test overview page',
-            description: 'Tap the "new test" icon to view an instrument\'s past tests and perform new ones.',
+            title: 'Go to instrument overview page',
+            description:
+            'Tap the "new check" icon to view an instrument\'s past monthly checks and perform new ones.',
             targetBorderRadius: BorderRadius.circular(20),
             targetPadding: const EdgeInsets.all(5),
-            child: const Icon(
-              Icons.add_chart,
-              color: AppTheme.accentColor,
-              size: 40.0,
+            child: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppTheme.buttonTextColor,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2), // Shadow color
+                    spreadRadius: 2,
+                    blurRadius: 2,
+                    offset: const Offset(0, 2), // Shadow position
+                  ),
+                ],
+              ),
+              padding: const EdgeInsets.all(8.0), // Padding inside the button
+              child: const Icon(
+                Icons.add_chart,
+                color: AppTheme.accentColor,
+                size: 40.0,
+              ),
             ),
           ),
         ),
@@ -68,3 +87,4 @@ class InstrumentTestButton extends StatelessWidget {
     );
   }
 }
+
