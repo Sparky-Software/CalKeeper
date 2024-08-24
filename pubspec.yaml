@@ -1,4 +1,4 @@
-name: calcard_app
+name: Cal_Keeper
 description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -44,6 +44,7 @@ dependencies:
   cupertino_icons: ^1.0.6
 
 dev_dependencies:
+  flutter_native_splash: ^2.4.1
   flutter_test:
     sdk: flutter
   hive_generator: ^2.0.1
@@ -55,6 +56,14 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^4.0.0
+
+flutter_native_splash:
+  android: true
+  ios: true
+  image: assets/splash_screen.png
+  color: "FFFFFF"
+  android_12:
+    branding: assets/branding.png
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "calcard_app" "\0"
+            VALUE "FileDescription", "CalKeeper" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "calcard_app" "\0"
+            VALUE "InternalName", "CalKeeper" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2024 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "calcard_app.exe" "\0"
-            VALUE "ProductName", "calcard_app" "\0"
+            VALUE "OriginalFilename", "Cal_Keeper.exe" "\0"
+            VALUE "ProductName", "Cal_Keeper" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

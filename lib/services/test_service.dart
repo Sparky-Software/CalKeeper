@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:calcard_app/models/instrument_test.dart';
-import 'package:calcard_app/models/instrument_test_point.dart';
+import 'package:Cal_Keeper/models/instrument_test.dart';
+import 'package:Cal_Keeper/models/instrument_test_point.dart';
 
 import '../models/instrument.dart';
 import '../models/tester.dart';

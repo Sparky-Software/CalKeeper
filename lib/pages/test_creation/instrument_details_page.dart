@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:calcard_app/services/test_service.dart';
-import 'package:calcard_app/models/instrument.dart';
-import 'package:calcard_app/widgets/custom_text_form_field.dart';
+import 'package:Cal_Keeper/services/test_service.dart';
+import 'package:Cal_Keeper/models/instrument.dart';
+import 'package:Cal_Keeper/widgets/custom_text_form_field.dart';
 import '../../core/utils/theme.dart';
 import '../../services/tester_service.dart';
 

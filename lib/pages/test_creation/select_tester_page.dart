@@ -1,4 +1,4 @@
-import 'package:calcard_app/services/tester_service.dart';
+import 'package:Cal_Keeper/services/tester_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'widgets/tester_button.dart';

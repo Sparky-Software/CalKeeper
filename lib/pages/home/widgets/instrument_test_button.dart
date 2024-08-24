@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:calcard_app/core/utils/theme.dart';
-import 'package:calcard_app/models/instrument_test.dart';
-import 'package:calcard_app/services/test_service.dart';
+import 'package:Cal_Keeper/core/utils/theme.dart';
+import 'package:Cal_Keeper/models/instrument_test.dart';
+import 'package:Cal_Keeper/services/test_service.dart';
 import 'package:showcaseview/showcaseview.dart';
 class InstrumentTestButton extends StatelessWidget {
   final InstrumentTest test;

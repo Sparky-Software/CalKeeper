@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:calcard_app/models/tester.dart';
+import 'package:Cal_Keeper/models/tester.dart';
 
 class TesterService with ChangeNotifier {
   final Box<Tester> _testersBox = Hive.box<Tester>('testers');

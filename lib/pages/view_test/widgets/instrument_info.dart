@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:calcard_app/models/instrument.dart';
+import 'package:Cal_Keeper/models/instrument.dart';
 import '../../../core/utils/theme.dart';
 
 class InstrumentInfo extends StatelessWidget {

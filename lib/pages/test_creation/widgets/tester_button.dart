@@ -1,4 +1,4 @@
-import 'package:calcard_app/models/tester.dart';
+import 'package:Cal_Keeper/models/tester.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../core/utils/theme.dart';

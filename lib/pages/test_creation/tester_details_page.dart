@@ -1,10 +1,10 @@
-import 'package:calcard_app/models/tester.dart';
-import 'package:calcard_app/pages/test_creation/widgets/warning_dialog.dart';
+import 'package:Cal_Keeper/models/tester.dart';
+import 'package:Cal_Keeper/pages/test_creation/widgets/warning_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:calcard_app/services/test_service.dart';
-import 'package:calcard_app/services/tester_service.dart';
-import 'package:calcard_app/widgets/custom_text_form_field.dart';
+import 'package:Cal_Keeper/services/test_service.dart';
+import 'package:Cal_Keeper/services/tester_service.dart';
+import 'package:Cal_Keeper/widgets/custom_text_form_field.dart';
 
 class TesterDetailsPage extends StatefulWidget {
   const TesterDetailsPage({super.key});

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:calcard_app/models/instrument_test_point.dart';
+import 'package:Cal_Keeper/models/instrument_test_point.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../core/utils/theme.dart';
@@ -297,11 +297,11 @@ class _TestPointGridState extends State<TestPointGrid> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        if(baseValues.insulation[0] != -1.0) Expanded(child: Center(child: Text('0.25M', style: _labelTextStyle))),
-                        if(baseValues.insulation[1] != -1.0) Expanded(child: Center(child: Text('0.5M', style: _labelTextStyle))),
-                        if(baseValues.insulation[2] != -1.0) Expanded(child: Center(child: Text('1M', style: _labelTextStyle))),
-                        if(baseValues.insulation[3] != -1.0) Expanded(child: Center(child: Text('2M', style: _labelTextStyle))),
-                        if(baseValues.insulation[4] != -1.0) Expanded(child: Center(child: Text('5M', style: _labelTextStyle))),
+                        if(baseValues.insulation[0] != -1.0) Expanded(child: Center(child: Text('0.5MΩ', style: _labelTextStyle))),
+                        if(baseValues.insulation[1] != -1.0) Expanded(child: Center(child: Text('1MΩ', style: _labelTextStyle))),
+                        if(baseValues.insulation[2] != -1.0) Expanded(child: Center(child: Text('2MΩ', style: _labelTextStyle))),
+                        if(baseValues.insulation[3] != -1.0) Expanded(child: Center(child: Text('10MΩ', style: _labelTextStyle))),
+                        if(baseValues.insulation[4] != -1.0) Expanded(child: Center(child: Text('20MΩ', style: _labelTextStyle))),
                       ],
                     ),
                     const Divider(thickness: 1.0, color: AppTheme.textColor2),
@@ -351,11 +351,11 @@ class _TestPointGridState extends State<TestPointGrid> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        if(baseValues.continuity[0] != -1.0) Expanded(child: Center(child: Text('0.25M', style: _labelTextStyle))),
-                        if(baseValues.continuity[1] != -1.0) Expanded(child: Center(child: Text('0.5M', style: _labelTextStyle))),
-                        if(baseValues.continuity[2] != -1.0) Expanded(child: Center(child: Text('1M', style: _labelTextStyle))),
-                        if(baseValues.continuity[3] != -1.0) Expanded(child: Center(child: Text('2M', style: _labelTextStyle))),
-                        if(baseValues.continuity[4] != -1.0) Expanded(child: Center(child: Text('5M', style: _labelTextStyle))),
+                        if(baseValues.continuity[0] != -1.0) Expanded(child: Center(child: Text('0.25Ω', style: _labelTextStyle))),
+                        if(baseValues.continuity[1] != -1.0) Expanded(child: Center(child: Text('0.5Ω', style: _labelTextStyle))),
+                        if(baseValues.continuity[2] != -1.0) Expanded(child: Center(child: Text('1Ω', style: _labelTextStyle))),
+                        if(baseValues.continuity[3] != -1.0) Expanded(child: Center(child: Text('2Ω', style: _labelTextStyle))),
+                        if(baseValues.continuity[4] != -1.0) Expanded(child: Center(child: Text('5Ω', style: _labelTextStyle))),
                       ],
                     ),
                     const Divider(thickness: 1.0, color: AppTheme.textColor2),

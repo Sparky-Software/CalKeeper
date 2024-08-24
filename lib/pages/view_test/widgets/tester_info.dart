@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../core/utils/theme.dart';
-import 'package:calcard_app/models/tester.dart';
+import 'package:Cal_Keeper/models/tester.dart';
 
 import '../../../services/tester_service.dart'; // Import the Tester model
 

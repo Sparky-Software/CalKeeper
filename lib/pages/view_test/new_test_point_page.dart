@@ -1,10 +1,10 @@
-import 'package:calcard_app/widgets/confirmation_dialog.dart';
+import 'package:Cal_Keeper/widgets/confirmation_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:calcard_app/services/test_service.dart';
-import 'package:calcard_app/models/instrument_test_point.dart'; //
-import 'package:calcard_app/widgets/custom_text_form_field.dart';
+import 'package:Cal_Keeper/services/test_service.dart';
+import 'package:Cal_Keeper/models/instrument_test_point.dart'; //
+import 'package:Cal_Keeper/widgets/custom_text_form_field.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../models/instrument_test.dart';
@@ -356,12 +356,18 @@ class NewTestPointPageState extends State<NewTestPointPage> {
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(10),
                       ],
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Date of test is required.';
+                        }
+                        return null;
+                      },
                     ),
                     const Divider(),
                     const Text('Insulation Values:'),
                     ...List.generate(5, (index) {
                       final value = _isBaseline ? null : baseValues?.insulation[index];
-                      if (_isBaseline || (value != null && value != -1.0)) {
+                      if (_isBaseline || (activeTest?.activeTestPoint?.insulation[index]!=-1.0 && activeTest?.activeTestPoint?.insulation[index]!=null )|| (value != null && value != -1.0)) {
                         return CustomTextFormField(
                           controller: _insulationControllers[index],
                           decoration: InputDecoration(
@@ -378,7 +384,7 @@ class NewTestPointPageState extends State<NewTestPointPage> {
                     const Text('Continuity Values:'),
                     ...List.generate(5, (index) {
                       final value = _isBaseline ? null : baseValues?.continuity[index];
-                      if (_isBaseline || (value != null && value != -1.0)) {
+                      if (_isBaseline || (activeTest?.activeTestPoint?.continuity[index]!=-1.0 && activeTest?.activeTestPoint?.continuity[index]!=null) ||(value != null && value != -1.0)) {
                         return CustomTextFormField(
                           controller: _continuityControllers[index],
                           decoration: InputDecoration(
@@ -392,7 +398,7 @@ class NewTestPointPageState extends State<NewTestPointPage> {
                       return SizedBox.shrink(); // No widget if condition not met
                     }),
                     const Divider(),
-                    if (_isBaseline || (baseValues?.zs != null && baseValues?.zs != -1.0)) ...[
+                    if (_isBaseline || (activeTest?.activeTestPoint?.zs!=null && activeTest?.activeTestPoint?.zs!=-1.0) || (baseValues?.zs != null && baseValues?.zs != -1.0)) ...[
                       CustomTextFormField(
                         controller: _zsController,
                         decoration: const InputDecoration(
@@ -403,7 +409,7 @@ class NewTestPointPageState extends State<NewTestPointPage> {
                         keyboardType: TextInputType.number,
                       ),
                     ],
-                    if (_isBaseline || (baseValues?.rcd != null && baseValues?.rcd != -1.0)) ...[
+                    if (_isBaseline || (activeTest?.activeTestPoint?.rcd!=null && activeTest?.activeTestPoint?.rcd!=-1.0) || (baseValues?.rcd != null && baseValues?.rcd != -1.0)) ...[
                       CustomTextFormField(
                         controller: _rcdController,
                         decoration: const InputDecoration(

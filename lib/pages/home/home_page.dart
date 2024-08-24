@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:showcaseview/showcaseview.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:calcard_app/core/utils/theme.dart';
-import 'package:calcard_app/services/test_service.dart';
-import 'package:calcard_app/pages/home/widgets/instrument_test_button.dart';
+import 'package:Cal_Keeper/core/utils/theme.dart';
+import 'package:Cal_Keeper/services/test_service.dart';
+import 'package:Cal_Keeper/pages/home/widgets/instrument_test_button.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

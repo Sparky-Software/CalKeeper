@@ -1,13 +1,13 @@
-import 'package:calcard_app/core/utils/theme.dart';
-import 'package:calcard_app/widgets/confirmation_dialog.dart';
+import 'package:Cal_Keeper/core/utils/theme.dart';
+import 'package:Cal_Keeper/widgets/confirmation_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:pdf/pdf.dart';
 import 'package:provider/provider.dart';
-import 'package:calcard_app/services/test_service.dart';
-import 'package:calcard_app/pages/view_test/widgets/instrument_info.dart';
-import 'package:calcard_app/pages/view_test/widgets/tester_info.dart';
-import 'package:calcard_app/pages/view_test/widgets/test_point_grid.dart';
-import 'package:calcard_app/core/pdf/pdf_service.dart';
+import 'package:Cal_Keeper/services/test_service.dart';
+import 'package:Cal_Keeper/pages/view_test/widgets/instrument_info.dart';
+import 'package:Cal_Keeper/pages/view_test/widgets/tester_info.dart';
+import 'package:Cal_Keeper/pages/view_test/widgets/test_point_grid.dart';
+import 'package:Cal_Keeper/core/pdf/pdf_service.dart';
 import 'package:printing/printing.dart';
 import 'package:showcaseview/showcaseview.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -180,8 +180,8 @@ class TestOverviewPageState extends State<TestOverviewPage> {
                   children: [
                     Showcase(
                       key: _addTestPointButtonKey,
-                      title: 'Perform monthly check',
-                      description: 'Tap this button to record the baseline reference values for a new instrument',
+                      title: 'Record baseline values',
+                      description: 'Tap this button to record the baseline reference values that the instruments values will be compared to each month.',
                       targetBorderRadius: BorderRadius.circular(100),
                       targetPadding: const EdgeInsets.all(10),
                       child: FloatingActionButton(

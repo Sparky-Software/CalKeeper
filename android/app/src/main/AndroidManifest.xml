@@ -1,12 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.example.calcard_app">
+          package="com.example.Cal_Keeper">
 
     <!-- Ensure your app has permission to write to external storage -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
-            android:label="Calcard"
+            android:label="CalKeeper"
             android:name="${applicationName}"
             android:requestLegacyExternalStorage="true"
             android:icon="@mipmap/ic_launcher">

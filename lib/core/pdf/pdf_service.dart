@@ -4,12 +4,11 @@ import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-import 'package:calcard_app/models/instrument_test.dart';
+import 'package:Cal_Keeper/models/instrument_test.dart';
 
 import '../../models/instrument_test_point.dart';
 
 class PdfService {
-
   int pageCount = 1;
   List<pw.Table> tables = [];
 
@@ -21,14 +20,80 @@ class PdfService {
   }
 
   Future<Uint8List> generateTestOverviewPdf(InstrumentTest activeTest) async {
-    _makeBottomTable(activeTest);
     final baseValues = activeTest.baseValues;
+
     final pdf = pw.Document(
       theme: pw.ThemeData.withFont(
         base: pw.Font.ttf(await rootBundle.load("fonts/arial.ttf")),
         bold: pw.Font.ttf(await rootBundle.load("fonts/arialbold.ttf")),
       ),
     );
+    _makeBottomTable(activeTest);
+
+    int zsCount = (baseValues?.zs != -1.0) ? 1 : 0;
+    int rcdCount = (baseValues?.rcd != -1.0) ? 1 : 0;
+    int insulationCount = 0;
+    for (int i = 0; i < 5; i++) {
+      if (baseValues?.insulation[i] != -1.0) {
+        insulationCount++;
+      }
+    }
+    int continuityCount = 0;
+    for (int i = 0; i < 5; i++) {
+      if (baseValues?.continuity[i] != -1.0) {
+        continuityCount++;
+      }
+    }
+
+    int cols = zsCount + rcdCount + insulationCount + continuityCount;
+
+    double baseColumnWidth = 1 / cols;
+    double insulationColumnWidth = insulationCount > 0 ? baseColumnWidth : 0;
+    double continuityColumnWidth = continuityCount > 0 ? baseColumnWidth : 0;
+    double zsColumnWidth = zsCount > 0 ? baseColumnWidth : 0;
+    double rcdColumnWidth = rcdCount > 0 ? baseColumnWidth : 0;
+
+
+    Map<int, pw.FractionColumnWidth> columnWidths = {
+      0: const pw.FractionColumnWidth(0.14), // Fixed column width for the date
+    };
+
+    int currentColumn = 1;
+
+    for (int i = 0; i < insulationCount; i++) {
+      columnWidths[currentColumn++] = pw.FractionColumnWidth(insulationColumnWidth);
+    }
+
+    for (int i = 0; i < continuityCount; i++) {
+      columnWidths[currentColumn++] = pw.FractionColumnWidth(continuityColumnWidth);
+    }
+
+    if (zsCount > 0) {
+      columnWidths[currentColumn++] = pw.FractionColumnWidth(zsColumnWidth);
+    }
+
+    if (rcdCount > 0) {
+      columnWidths[currentColumn++] = pw.FractionColumnWidth(rcdColumnWidth);
+    }
+
+    Map<int, pw.FractionColumnWidth> columnWidthsTop = {
+      0: const pw.FractionColumnWidth(0.14), // Fixed column width for the date
+      1: pw.FractionColumnWidth(insulationColumnWidth*insulationCount),
+      2: pw.FractionColumnWidth(continuityColumnWidth*continuityCount),
+      3: pw.FractionColumnWidth(zsColumnWidth),
+      4: pw.FractionColumnWidth(rcdColumnWidth),
+    };
+
+    Map<int, pw.FractionColumnWidth> columnWidthsTopLeft = {};
+    for (int i = 0; i < insulationCount; i++) {
+      columnWidthsTopLeft[i] = pw.FractionColumnWidth(insulationColumnWidth);
+    }
+
+    Map<int, pw.FractionColumnWidth> columnWidthsTopRight = {};
+    for (int i = 0; i < continuityCount; i++) {
+      columnWidthsTopRight[i] = pw.FractionColumnWidth(continuityColumnWidth);
+    }
+
     pdf.addPage(
       pw.Page(
         margin: const pw.EdgeInsets.all(24),
@@ -102,14 +167,9 @@ class PdfService {
                   ),
                 ],
               ),
+
               pw.Table(
-                  columnWidths: {
-                    0: const pw.FractionColumnWidth(0.13),
-                    1: const pw.FractionColumnWidth(0.35),
-                    2: const pw.FractionColumnWidth(0.35),
-                    3: const pw.FractionColumnWidth(0.09),
-                    4: const pw.FractionColumnWidth(0.08),
-                  },
+                  columnWidths: columnWidthsTop,
                   border: pw.TableBorder.all(),
                   children: [
                     pw.TableRow(
@@ -143,91 +203,90 @@ class PdfService {
                               pw.SizedBox(height: 4),
                               pw.Table(
                                   border: pw.TableBorder.all(),
-                                  columnWidths: {
-                                    0: const pw.FlexColumnWidth(),
-                                    1: const pw.FlexColumnWidth(),
-                                    2: const pw.FlexColumnWidth(),
-                                    3: const pw.FlexColumnWidth(),
-                                    4: const pw.FlexColumnWidth(),
-                                  },
+                                  columnWidths: columnWidthsTopLeft,
                                   children: [
                                     pw.TableRow(
                                       children: [
-                                        pw.Padding(
-                                          padding:
-                                              const pw.EdgeInsets.symmetric(
-                                                  horizontal: 8.0),
-                                          child: pw.Align(
-                                            alignment: pw.Alignment.center,
-                                            child: pw.Text(
-                                              style: const pw.TextStyle(
-                                                fontSize: 11,
+                                        if(activeTest.baseValues?.insulation[0] != -1.0)
+                                          pw.Padding(
+                                            padding:
+                                                const pw.EdgeInsets.symmetric(
+                                                    horizontal: 8.0),
+                                            child: pw.Align(
+                                              alignment: pw.Alignment.center,
+                                              child: pw.Text(
+                                                style: const pw.TextStyle(
+                                                  fontSize: 11,
+                                                ),
+                                                '0.5\nMΩ',
+                                                textAlign: pw.TextAlign.center,
                                               ),
-                                              '0.5\nMΩ',
-                                              textAlign: pw.TextAlign.center,
                                             ),
                                           ),
-                                        ),
-                                        pw.Padding(
-                                          padding:
-                                              const pw.EdgeInsets.symmetric(
-                                                  horizontal: 8.0),
-                                          child: pw.Align(
-                                            alignment: pw.Alignment.center,
-                                            child: pw.Text(
-                                              style: const pw.TextStyle(
-                                                fontSize: 11,
+                                        if(activeTest.baseValues?.insulation[1] != -1.0)
+                                          pw.Padding(
+                                            padding:
+                                                const pw.EdgeInsets.symmetric(
+                                                    horizontal: 8.0),
+                                            child: pw.Align(
+                                              alignment: pw.Alignment.center,
+                                              child: pw.Text(
+                                                style: const pw.TextStyle(
+                                                  fontSize: 11,
+                                                ),
+                                                '1\nMΩ',
+                                                textAlign: pw.TextAlign.center,
                                               ),
-                                              '1\nMΩ',
-                                              textAlign: pw.TextAlign.center,
                                             ),
                                           ),
-                                        ),
-                                        pw.Padding(
-                                          padding:
-                                              const pw.EdgeInsets.symmetric(
-                                                  horizontal: 8.0),
-                                          child: pw.Align(
-                                            alignment: pw.Alignment.center,
-                                            child: pw.Text(
-                                              style: const pw.TextStyle(
-                                                fontSize: 11,
+                                        if(activeTest.baseValues?.insulation[2] != -1.0)
+                                          pw.Padding(
+                                            padding:
+                                                const pw.EdgeInsets.symmetric(
+                                                    horizontal: 8.0),
+                                            child: pw.Align(
+                                              alignment: pw.Alignment.center,
+                                              child: pw.Text(
+                                                style: const pw.TextStyle(
+                                                  fontSize: 11,
+                                                ),
+                                                '2\nMΩ',
+                                                textAlign: pw.TextAlign.center,
                                               ),
-                                              '2\nMΩ',
-                                              textAlign: pw.TextAlign.center,
                                             ),
                                           ),
-                                        ),
-                                        pw.Padding(
-                                          padding:
-                                              const pw.EdgeInsets.symmetric(
-                                                  horizontal: 8.0),
-                                          child: pw.Align(
-                                            alignment: pw.Alignment.center,
-                                            child: pw.Text(
-                                              style: const pw.TextStyle(
-                                                fontSize: 11,
+                                        if(activeTest.baseValues?.insulation[3] != -1.0)
+                                          pw.Padding(
+                                            padding:
+                                                const pw.EdgeInsets.symmetric(
+                                                    horizontal: 8.0),
+                                            child: pw.Align(
+                                              alignment: pw.Alignment.center,
+                                              child: pw.Text(
+                                                style: const pw.TextStyle(
+                                                  fontSize: 11,
+                                                ),
+                                                '10\nMΩ',
+                                                textAlign: pw.TextAlign.center,
                                               ),
-                                              '10\nMΩ',
-                                              textAlign: pw.TextAlign.center,
                                             ),
                                           ),
-                                        ),
-                                        pw.Padding(
-                                          padding:
-                                              const pw.EdgeInsets.symmetric(
-                                                  horizontal: 8.0),
-                                          child: pw.Align(
-                                            alignment: pw.Alignment.center,
-                                            child: pw.Text(
-                                              style: const pw.TextStyle(
-                                                fontSize: 11,
+                                        if(activeTest.baseValues?.insulation[4] != -1.0)
+                                          pw.Padding(
+                                            padding:
+                                                const pw.EdgeInsets.symmetric(
+                                                    horizontal: 8.0),
+                                            child: pw.Align(
+                                              alignment: pw.Alignment.center,
+                                              child: pw.Text(
+                                                style: const pw.TextStyle(
+                                                  fontSize: 11,
+                                                ),
+                                                '20\nMΩ',
+                                                textAlign: pw.TextAlign.center,
                                               ),
-                                              '20\nMΩ',
-                                              textAlign: pw.TextAlign.center,
                                             ),
                                           ),
-                                        ),
                                       ],
                                     ),
                                   ]),
@@ -250,16 +309,11 @@ class PdfService {
                               pw.SizedBox(height: 4),
                               pw.Table(
                                   border: pw.TableBorder.all(),
-                                  columnWidths: {
-                                    0: const pw.FlexColumnWidth(),
-                                    1: const pw.FlexColumnWidth(),
-                                    2: const pw.FlexColumnWidth(),
-                                    3: const pw.FlexColumnWidth(),
-                                    4: const pw.FlexColumnWidth(),
-                                  },
+                                  columnWidths: columnWidthsTopRight,
                                   children: [
                                     pw.TableRow(
                                       children: [
+                                        if(activeTest.baseValues?.continuity[0] != -1.0)
                                         pw.Padding(
                                           padding:
                                               const pw.EdgeInsets.symmetric(
@@ -275,6 +329,7 @@ class PdfService {
                                             ),
                                           ),
                                         ),
+                                        if(activeTest.baseValues?.continuity[1] != -1.0)
                                         pw.Padding(
                                           padding:
                                               const pw.EdgeInsets.symmetric(
@@ -290,6 +345,7 @@ class PdfService {
                                             ),
                                           ),
                                         ),
+                                        if(activeTest.baseValues?.continuity[2] != -1.0)
                                         pw.Padding(
                                           padding:
                                               const pw.EdgeInsets.symmetric(
@@ -305,6 +361,7 @@ class PdfService {
                                             ),
                                           ),
                                         ),
+                                        if(activeTest.baseValues?.continuity[3] != -1.0)
                                         pw.Padding(
                                           padding:
                                               const pw.EdgeInsets.symmetric(
@@ -320,6 +377,7 @@ class PdfService {
                                             ),
                                           ),
                                         ),
+                                        if(activeTest.baseValues?.continuity[4] != -1.0)
                                         pw.Padding(
                                           padding:
                                               const pw.EdgeInsets.symmetric(
@@ -362,45 +420,29 @@ class PdfService {
                       ],
                     ),
                   ]),
-              pw.Table(
-                columnWidths: {
-                  0: const pw.FractionColumnWidth(0.13),
-                  1: const pw.FractionColumnWidth(0.07),
-                  2: const pw.FractionColumnWidth(0.07),
-                  3: const pw.FractionColumnWidth(0.07),
-                  4: const pw.FractionColumnWidth(0.07),
-                  5: const pw.FractionColumnWidth(0.07),
-                  6: const pw.FractionColumnWidth(0.07),
-                  7: const pw.FractionColumnWidth(0.07),
-                  8: const pw.FractionColumnWidth(0.07),
-                  9: const pw.FractionColumnWidth(0.07),
-                  10: const pw.FractionColumnWidth(0.07),
-                  11: const pw.FractionColumnWidth(0.09),
-                  12: const pw.FractionColumnWidth(0.08),
-                },
-                border: pw.TableBorder.all(),
-                children: [
-                  if (baseValues != null) ...[
-                    pw.TableRow(
-                      children: [
-                        _buildTableCell(baseValues.date),
-                        _buildTableCell('${baseValues.insulation[0]}'),
-                        _buildTableCell('${baseValues.insulation[1]}'),
-                        _buildTableCell('${baseValues.insulation[2]}'),
-                        _buildTableCell('${baseValues.insulation[3]}'),
-                        _buildTableCell('${baseValues.insulation[4]}'),
-                        _buildTableCell('${baseValues.continuity[0]}'),
-                        _buildTableCell('${baseValues.continuity[1]}'),
-                        _buildTableCell('${baseValues.continuity[2]}'),
-                        _buildTableCell('${baseValues.continuity[3]}'),
-                        _buildTableCell('${baseValues.continuity[4]}'),
-                        _buildTableCell('${baseValues.zs}'),
-                        _buildTableCell('${baseValues.rcd}'),
-                      ],
-                    ),
-                  ]
-                ],
-              ),
+                  pw.Table(
+                    columnWidths: columnWidths, // Use the dynamic columnWidths map
+                    border: pw.TableBorder.all(),
+                    children: [
+                      if (baseValues != null) ...[
+                        pw.TableRow(
+                          children: [
+                            _buildTableCell(baseValues.date),
+                            if (insulationCount > 0)
+                              for (int i = 0; i < 5;i++)
+                                if(baseValues.insulation[i] != -1.0)
+                                  _buildTableCell('${baseValues.insulation[i]}'),
+                            if (continuityCount > 0)
+                              for (int i = 0; i < 5;i++)
+                                if(baseValues.continuity[i] != -1.0)
+                                  _buildTableCell('${baseValues.continuity[i]}'),
+                            if (zsCount > 0) _buildTableCell('${baseValues.zs}'),
+                            if (rcdCount > 0) _buildTableCell('${baseValues.rcd}'),
+                          ],
+                        ),
+                      ]
+                    ],
+                  ),
               pw.Table(
                 border: pw.TableBorder.all(),
                 children: [
@@ -431,7 +473,7 @@ class PdfService {
         },
       ),
     );
-    for(int i = 1; i < pageCount && i < tables.length; i++) {
+    for (int i = 1; i < pageCount && i < tables.length; i++) {
       pdf.addPage(
         pw.Page(
           margin: const pw.EdgeInsets.all(24),
@@ -469,7 +511,8 @@ class PdfService {
           },
         ),
       );
-    };
+    }
+    ;
     return pdf.save();
   }
 
@@ -480,79 +523,104 @@ class PdfService {
 
     if (activeTest.testPoints.isNotEmpty) {
       for (testPoint in activeTest.testPoints!) {
+
+        final baseValues = activeTest.baseValues;
+        int zsCount = (baseValues?.zs != -1.0) ? 1 : 0;
+        int rcdCount = (baseValues?.rcd != -1.0) ? 1 : 0;
+        int insulationCount = 0;
+        for (int i = 0; i < 5; i++) {
+          if (baseValues?.insulation[i] != -1.0) {
+            insulationCount++;
+          }
+        }
+        int continuityCount = 0;
+        for (int i = 0; i < 5; i++) {
+          if (baseValues?.continuity[i] != -1.0) {
+            continuityCount++;
+          }
+        }
+
+// Determine the number of columns
+        int cols = zsCount + rcdCount + insulationCount + continuityCount;
+
+// Base column widths (adjustable)
+        double baseColumnWidth = 1 / cols;
+
+// Column width adjustments if some columns are not included
+        double insulationColumnWidth =
+            insulationCount > 0 ? baseColumnWidth : 0;
+        double continuityColumnWidth =
+            continuityCount > 0 ? baseColumnWidth : 0;
+        double zsColumnWidth = zsCount > 0 ? baseColumnWidth : 0;
+        double rcdColumnWidth = rcdCount > 0 ? baseColumnWidth : 0;
+
         rows.add(
           pw.TableRow(
             children: [
               _buildTableCell(testPoint.date),
-              _buildTableCell('${testPoint.insulation[0]}'),
-              _buildTableCell('${testPoint.insulation[1]}'),
-              _buildTableCell('${testPoint.insulation[2]}'),
-              _buildTableCell('${testPoint.insulation[3]}'),
-              _buildTableCell('${testPoint.insulation[4]}'),
-              _buildTableCell('${testPoint.continuity[0]}'),
-              _buildTableCell('${testPoint.continuity[1]}'),
-              _buildTableCell('${testPoint.continuity[2]}'),
-              _buildTableCell('${testPoint.continuity[3]}'),
-              _buildTableCell('${testPoint.continuity[4]}'),
-              _buildTableCell('${testPoint.zs}'),
-              _buildTableCell('${testPoint.rcd}'),
+              if (insulationCount > 0)
+                for (int i = 0; i < 5; i++)
+                  if(activeTest.baseValues?.insulation[i] != -1.0)
+                    _buildTableCell('${testPoint.insulation[i]}'),
+              if (continuityCount > 0)
+                for (int i = 0; i < 5; i++)
+                  if(activeTest.baseValues?.continuity[i] != -1.0)
+                    _buildTableCell('${testPoint.continuity[i]}'),
+              if (zsCount > 0) _buildTableCell('${testPoint.zs}'),
+              if (rcdCount > 0) _buildTableCell('${testPoint.rcd}'),
             ],
           ),
         );
 
+        Map<int, pw.FractionColumnWidth> columnWidths = {
+          // Commonly present columns (assuming 0, 1 are fixed)
+          0: const pw.FractionColumnWidth(0.14),
+        };
+
+        int currentColumn = 1; // Starting from column 2
+
+        for (int i = 0; i < insulationCount; i++) {
+          columnWidths[currentColumn++] =
+              pw.FractionColumnWidth(insulationColumnWidth);
+        }
+
+        for (int i = 0; i < continuityCount; i++) {
+          columnWidths[currentColumn++] =
+              pw.FractionColumnWidth(continuityColumnWidth);
+        }
+
+        if (zsCount > 0) {
+          columnWidths[currentColumn++] = pw.FractionColumnWidth(zsColumnWidth);
+        }
+        if (rcdCount > 0) {
+          columnWidths[currentColumn++] =
+              pw.FractionColumnWidth(rcdColumnWidth);
+        }
+
         if ((rows.length >= 14 && pageCount == 1) || rows.length >= 25) {
           pageCount++;
           tables.add(pw.Table(
-            columnWidths: {
-              0: const pw.FractionColumnWidth(0.13),
-              1: const pw.FractionColumnWidth(0.07),
-              2: const pw.FractionColumnWidth(0.07),
-              3: const pw.FractionColumnWidth(0.07),
-              4: const pw.FractionColumnWidth(0.07),
-              5: const pw.FractionColumnWidth(0.07),
-              6: const pw.FractionColumnWidth(0.07),
-              7: const pw.FractionColumnWidth(0.07),
-              8: const pw.FractionColumnWidth(0.07),
-              9: const pw.FractionColumnWidth(0.07),
-              10: const pw.FractionColumnWidth(0.07),
-              11: const pw.FractionColumnWidth(0.09),
-              12: const pw.FractionColumnWidth(0.08),
-            },
+            columnWidths: columnWidths,
             border: pw.TableBorder.all(),
             children: rows,
           ));
           rows = [];
         }
-      }
 
-      // Add the remaining rows
-      if (rows.isNotEmpty) {
-        tables.add(pw.Table(
-          columnWidths: {
-            0: const pw.FractionColumnWidth(0.13),
-            1: const pw.FractionColumnWidth(0.07),
-            2: const pw.FractionColumnWidth(0.07),
-            3: const pw.FractionColumnWidth(0.07),
-            4: const pw.FractionColumnWidth(0.07),
-            5: const pw.FractionColumnWidth(0.07),
-            6: const pw.FractionColumnWidth(0.07),
-            7: const pw.FractionColumnWidth(0.07),
-            8: const pw.FractionColumnWidth(0.07),
-            9: const pw.FractionColumnWidth(0.07),
-            10: const pw.FractionColumnWidth(0.07),
-            11: const pw.FractionColumnWidth(0.09),
-            12: const pw.FractionColumnWidth(0.08),
-          },
-          border: pw.TableBorder.all(),
-          children: rows,
-        ));
+        if (rows.isNotEmpty) {
+          tables.add(pw.Table(
+            columnWidths: columnWidths,
+            border: pw.TableBorder.all(),
+            children: rows,
+          ));
+        }
+
+        this.tables = tables;
       }
-      this.tables = tables;
-    } else{
+    } else {
       this.tables = [pw.Table()];
     }
   }
-
 
   List<pw.TableRow> _makeTopTable(InstrumentTest activeTest) {
     List<Map<String, String>> leftValues = [];
@@ -645,7 +713,8 @@ class PdfService {
 
     return pw.Container(
       child: pw.Padding(
-        padding: const pw.EdgeInsets.symmetric(vertical: 8.0), // Adjust vertical padding here
+        padding: const pw.EdgeInsets.symmetric(
+            vertical: 8.0), // Adjust vertical padding here
         child: pw.Align(
           alignment: pw.Alignment.center,
           child: pw.Text(
@@ -658,5 +727,4 @@ class PdfService {
       ),
     );
   }
-
 }

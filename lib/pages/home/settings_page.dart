@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:calcard_app/core/utils/theme.dart';
+import 'package:Cal_Keeper/core/utils/theme.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
