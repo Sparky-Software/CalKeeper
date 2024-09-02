@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
@@ -48,10 +49,10 @@ class PdfService {
     int cols = zsCount + rcdCount + insulationCount + continuityCount;
 
     double baseColumnWidth = 1 / cols;
-    double insulationColumnWidth = insulationCount > 0 ? baseColumnWidth : 0;
-    double continuityColumnWidth = continuityCount > 0 ? baseColumnWidth : 0;
-    double zsColumnWidth = zsCount > 0 ? baseColumnWidth : 0;
-    double rcdColumnWidth = rcdCount > 0 ? baseColumnWidth : 0;
+    double insulationColumnWidth = insulationCount > 0 ? min(baseColumnWidth,0.065) : 0;
+    double continuityColumnWidth = continuityCount > 0 ? min(baseColumnWidth,0.065) : 0;
+    double zsColumnWidth = zsCount > 0 ? min(baseColumnWidth,0.11) : 0;
+    double rcdColumnWidth = rcdCount > 0 ? min(baseColumnWidth,0.10) : 0;
 
 
     Map<int, pw.FractionColumnWidth> columnWidths = {
@@ -61,7 +62,7 @@ class PdfService {
     int currentColumn = 1;
 
     for (int i = 0; i < insulationCount; i++) {
-      columnWidths[currentColumn++] = pw.FractionColumnWidth(insulationColumnWidth);
+      columnWidths[currentColumn++] = pw.FractionColumnWidth(max(insulationColumnWidth*insulationCount,0.24)/insulationCount);
     }
 
     for (int i = 0; i < continuityCount; i++) {
@@ -78,7 +79,7 @@ class PdfService {
 
     Map<int, pw.FractionColumnWidth> columnWidthsTop = {
       0: const pw.FractionColumnWidth(0.14), // Fixed column width for the date
-      1: pw.FractionColumnWidth(insulationColumnWidth*insulationCount),
+      1: pw.FractionColumnWidth(max(insulationColumnWidth*insulationCount,0.24)),
       2: pw.FractionColumnWidth(continuityColumnWidth*continuityCount),
       3: pw.FractionColumnWidth(zsColumnWidth),
       4: pw.FractionColumnWidth(rcdColumnWidth),
@@ -421,7 +422,7 @@ class PdfService {
                     ),
                   ]),
                   pw.Table(
-                    columnWidths: columnWidths, // Use the dynamic columnWidths map
+                    columnWidths: columnWidths,
                     border: pw.TableBorder.all(),
                     children: [
                       if (baseValues != null) ...[
@@ -543,16 +544,11 @@ class PdfService {
 // Determine the number of columns
         int cols = zsCount + rcdCount + insulationCount + continuityCount;
 
-// Base column widths (adjustable)
         double baseColumnWidth = 1 / cols;
-
-// Column width adjustments if some columns are not included
-        double insulationColumnWidth =
-            insulationCount > 0 ? baseColumnWidth : 0;
-        double continuityColumnWidth =
-            continuityCount > 0 ? baseColumnWidth : 0;
-        double zsColumnWidth = zsCount > 0 ? baseColumnWidth : 0;
-        double rcdColumnWidth = rcdCount > 0 ? baseColumnWidth : 0;
+        double insulationColumnWidth = insulationCount > 0 ? min(baseColumnWidth,0.065) : 0;
+        double continuityColumnWidth = continuityCount > 0 ? min(baseColumnWidth,0.065) : 0;
+        double zsColumnWidth = zsCount > 0 ? min(baseColumnWidth,0.11) : 0;
+        double rcdColumnWidth = rcdCount > 0 ? min(baseColumnWidth,0.10) : 0;
 
         rows.add(
           pw.TableRow(
@@ -581,7 +577,7 @@ class PdfService {
 
         for (int i = 0; i < insulationCount; i++) {
           columnWidths[currentColumn++] =
-              pw.FractionColumnWidth(insulationColumnWidth);
+              pw.FractionColumnWidth(max(insulationColumnWidth*insulationCount,0.24)/insulationCount);
         }
 
         for (int i = 0; i < continuityCount; i++) {
