@@ -1,13 +1,7 @@
-# Cal_Keeper - The Electrical Test Instrument Logbook App
+![Branding](./assets/branding.png)
+## Currently in open testing on the Google Play Store)
 
-## Currently in open testing on the Google Play Store
-
-CalKeep is the comprehensive solution for maintaining accurate and up-to-date records of the accuracy of all your test instruments.
-
-<div style="display: flex; align-items: center;">
-    <img src="./assets/branding.png" alt="Branding" style="margin-right: 10px;"/>
-    <img src="./assets/icon.png" alt="Icon"/>
-</div>
+CalKeeper is the comprehensive solution for maintaining accurate and up-to-date records of the accuracy of all your test instruments.
 
 ![Screenshot 1](./assets/s1.png)
 ![Screenshot 2](./assets/s2.png)
