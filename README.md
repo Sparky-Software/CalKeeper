@@ -1,16 +1,7 @@
-# Cal_Keeper
+# Cal_Keeper - The Electrical Test Instrument Logbook App
 
-A new Flutter project.
+## Currently in open testing on the Google Play Store)
 
-## Getting Started
+CalKeep is the comprehensive solution for maintaining accurate and up-to-date records of the accuracy of all your test instruments.
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![Branding](./branding.png)
