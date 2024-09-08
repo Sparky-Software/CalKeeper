@@ -4,4 +4,4 @@
 
 CalKeep is the comprehensive solution for maintaining accurate and up-to-date records of the accuracy of all your test instruments.
 
-![Branding](./branding.png)
+![Branding](./assets/branding.png)
