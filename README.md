@@ -1,4 +1,4 @@
-<img src="./assets/branding.png" width="1100" alt="Branding"/>
+<img src="./assets/branding.png" width="900" alt="Branding"/>
 
 CalKeeper is the comprehensive solution for maintaining accurate and up-to-date records of the accuracy of all your test instruments. Currently in open testing on the Google Play Store.
 
