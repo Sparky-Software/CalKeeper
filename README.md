@@ -1,7 +1,7 @@
 <img src="./assets/branding.png" width="900" alt="Branding"/>
 
-CalKeeper is the comprehensive solution for maintaining accurate and up-to-date records of the accuracy of all your test instruments. 
-Designed for streamlined use alongside a CalCard by UK electricians, CalKeeper makes ensuring your instruments are within calibration thresholds easy.
+CalKeeper is the comprehensive solution for maintaining accurate and up-to-date records of the accuracy of all your electrical test instruments. 
+Designed for streamlined use alongside a CalCard by UK electricians, CalKeeper makes ensuring your instruments are calibrated easy.
 
 Key Features:
 <ul>
