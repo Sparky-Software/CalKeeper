@@ -5,10 +5,9 @@ Designed for streamlined use alongside a CalCard by UK electricians, CalKeeper m
 
 Key Features:
 <ul>
-  <li>View all your test instrument records in one place.</li>
+  <li>Record insulation, continuity, earth loop, and RCD values, with the flexibility to enter as much or as little detail as you need.</li>
   <li>Export monthly check reports to PDF at the touch of a button for inspection.</li>
   <li>Receive automatic alerts when test points vary from baseline readings.</li>
-  <li>Record insulation, continuity, earth loop, and RCD values, with the flexibility to enter as much or as little detail as you need.</li>
   <li>Get started effortlessly with tutorial prompts guiding you through setup.</li>
 </ul>
 
