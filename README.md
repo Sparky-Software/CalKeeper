@@ -10,8 +10,10 @@ Key Features:
   <li>Receive automatic alerts when test points vary from baseline readings.</li>
   <li>Get started effortlessly with tutorial prompts guiding you through setup.</li>
 </ul>
-</br>
+<br>
+<br>
 **Currently in open testing on the Google Play Store, with public release coming 01/10/2024 and IOS release early 2025.**
+
 
 ## In App Screenshots
 <img src="./assets/s1.png" width="225" alt="Screenshot 1"/> <img src="./assets/s2.png" width="225" alt="Screenshot 1"/>
