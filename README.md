@@ -1,7 +1,7 @@
 <img src="./assets/branding.png" width="900" alt="Branding"/>
 
 CalKeeper is the comprehensive solution for maintaining accurate and up-to-date records of the accuracy of all your test instruments. <br><br>
-**Currently in open testing on the Google Play Store**.
+**Currently in open testing on the Google Play Store, with public release coming 01/10/2024 and IOS release early 2025**.
 
 ## In App Screenshots
 <img src="./assets/s1.png" width="225" alt="Screenshot 1"/> <img src="./assets/s1.png" width="225" alt="Screenshot 1"/>
