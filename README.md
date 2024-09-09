@@ -10,8 +10,7 @@ Key Features:
   <li>Receive automatic alerts when test points vary from baseline readings.</li>
   <li>Get started effortlessly with tutorial prompts guiding you through setup.</li>
 </ul>
-
-With CalKeeper, you can ensure your test instruments remain reliable and compliant—helping you maintain high standards in your electrical work.<br><br>
+<br>
 **Currently in open testing on the Google Play Store, with public release coming 01/10/2024 and IOS release early 2025**.
 
 ## In App Screenshots
