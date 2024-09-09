@@ -1,6 +1,18 @@
 <img src="./assets/branding.png" width="900" alt="Branding"/>
 
-CalKeeper is the comprehensive solution for maintaining accurate and up-to-date records of the accuracy of all your test instruments. <br><br>
+CalKeeper is the comprehensive solution for maintaining accurate and up-to-date records of the accuracy of all your test instruments. 
+Designed for streamlined use alongside a CalCard by UK electricians, CalKeeper makes ensuring your instruments are within calibration thresholds easy.
+
+Key Features:
+<ul>
+  <li>View all your test instrument records in one place.</li>
+  Export monthly check reports to PDF at the touch of a button for inspection.
+  Receive automatic alerts when test points vary from baseline readings.
+  Record insulation, continuity, earth loop, and RCD values, with the flexibility to enter as much or as little detail as you need.
+  Get started effortlessly with tutorial prompts guiding you through setup.
+</ul>
+
+With CalKeeper, you can ensure your test instruments remain reliable and compliant—helping you maintain high standards in your electrical work.<br><br>
 **Currently in open testing on the Google Play Store, with public release coming 01/10/2024 and IOS release early 2025**.
 
 ## In App Screenshots
