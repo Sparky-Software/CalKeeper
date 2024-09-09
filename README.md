@@ -8,6 +8,7 @@ Key Features:
   <li>Record insulation, continuity, earth loop, and RCD values, with the flexibility to enter as much or as little detail as you need.</li>
   <li>Export monthly check reports to PDF at the touch of a button for inspection.</li>
   <li>Receive automatic alerts when test points vary from baseline readings.</li>
+  <li>Stay on-top of your testing with notifications when instrument tests are due</li>
   <li>Get started effortlessly with tutorial prompts guiding you through setup.</li>
 </ul>
 <br>
