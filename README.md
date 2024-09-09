@@ -3,11 +3,7 @@
 CalKeeper is the comprehensive solution for maintaining accurate and up-to-date records of the accuracy of all your test instruments. Currently in open testing on the Google Play Store.
 
 ## In App Screenshots
-![Screenshot 1](./assets/s1.png)
-![Screenshot 2](./assets/s2.png)
-![Screenshot 3](./assets/s3.png)
-![Screenshot 4](./assets/s4.png)
-![Screenshot 5](./assets/s5.png)
-![Screenshot 6](./assets/s6.png)
-![Screenshot 7](./assets/s7.png)
-![Screenshot 8](./assets/s8.png)
+<img src="./assets/s1.png" width="400" alt="Screenshot 1"/> <img src="./assets/s1.png" width="400" alt="Screenshot 1"/>
+<img src="./assets/s3.png" width="400" alt="Screenshot 3"/> <img src="./assets/s3.png" width="400" alt="Screenshot 3"/>
+<img src="./assets/s5.png" width="400" alt="Screenshot 5"/> <img src="./assets/s5.png" width="400" alt="Screenshot 5"/>
+<img src="./assets/s7.png" width="400" alt="Screenshot 7"/> <img src="./assets/s7.png" width="400" alt="Screenshot 7"/>
