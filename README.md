@@ -17,6 +17,6 @@ Key Features:
 
 ## In App Screenshots
 <img src="./assets/s1.png" width="225" alt="Screenshot 1"/> <img src="./assets/s2.png" width="225" alt="Screenshot 1"/>
-<img src="./assets/s3.png" width="225" alt="Screenshot 3"/> <img src="./assets/s4.png" width="225" alt="Screenshot 3"/>
+<img src="./assets/s3.png" width="225" alt="Screenshot 3"/> <img src="./assets/s4.png" width="225" alt="Screenshot 4"/>
 <img src="./assets/s5.png" width="225" alt="Screenshot 5"/> <img src="./assets/s6.png" width="225" alt="Screenshot 5"/>
 <img src="./assets/s7.png" width="225" alt="Screenshot 7"/> <img src="./assets/s8.png" width="225" alt="Screenshot 7"/>
