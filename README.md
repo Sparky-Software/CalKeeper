@@ -13,8 +13,6 @@ Key Features:
 </ul>
 <br>
 
-**Currently in open testing on the Google Play Store, with public release coming 01/10/2024 and IOS release early 2025.**
-
 ## In App Screenshots
 <img src="./assets/s1.png" width="225" alt="Screenshot 1"/> <img src="./assets/s2.png" width="225" alt="Screenshot 1"/>
 <img src="./assets/s3.png" width="225" alt="Screenshot 3"/> <img src="./assets/s4.png" width="225" alt="Screenshot 4"/>
